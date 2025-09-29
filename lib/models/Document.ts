@@ -1,0 +1,21 @@
+import mongoose from 'mongoose';
+
+const documentSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    created: {
+        type: Date,
+        default: Date.now
+    },
+    updated: Date,
+    author: String,
+    collaborators: [String],
+    tags: [String]
+}, {
+    timestamps: true
+});
+
+const Document = mongoose.model('Document', documentSchema);
+export default Document;
