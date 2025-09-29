@@ -10,11 +10,15 @@ function Home() {
 
   useEffect (() => {
     const fabriccanvas = new fabric.Canvas(canvasref.current, {
-      height: 500,
-      width: 500,
+      width : 100,
+      height : 100,
       isDrawingMode: true,
 
     })
+
+    fabriccanvas.setWidth(window.innerWidth);
+    fabriccanvas.setHeight(window.innerHeight);
+
 
     fabriccanvas.freeDrawingBrush = new fabric.PencilBrush(fabriccanvas)
     fabriccanvas.freeDrawingBrush.color = "#000000"
