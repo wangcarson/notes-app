@@ -6,6 +6,7 @@ import * as fabric from "fabric";
 
 function Home() {
   const canvasref = useRef(null)
+  const [canvas, setCanvas] = useState(null)
 
   useEffect (() => {
     const fabriccanvas = new fabric.Canvas(canvasref.current, {
@@ -18,6 +19,7 @@ function Home() {
     fabriccanvas.freeDrawingBrush = new fabric.PencilBrush(fabriccanvas)
     fabriccanvas.freeDrawingBrush.color = "#000000"
     fabriccanvas.freeDrawingBrush.width = 5
+    setCanvas(fabriccanvas)
 
 
     return () => {
@@ -29,7 +31,7 @@ function Home() {
 
   return ( 
    <div style={{ display: "flex", flexDirection: "column"}}>
-    <button>CLEAR CANVAS</button>
+    <button onClick={()=> canvas.clear()}>CLEAR CANVAS</button>
     <canvas ref = {canvasref} style={{border : "1px solid black"}}></canvas>
   </div>
 
