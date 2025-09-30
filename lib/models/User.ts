@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     email: String,
     passwordHash: String,
     preferences: {},
+    boards: []
 }, {
     timestamps: true
 });
