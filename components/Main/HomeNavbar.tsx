@@ -1,50 +1,48 @@
+import Link from 'next/link';
 import React from 'react';
+import CustomLink from '../Templates/CustomLink';
+import CustomButton from '../Templates/CustomButton';
 
 const HomeNavbar:React.FC = () => {
   
   return (
     // https://tailwindflex.com/@sophia-baker/minimalistic-header-navbar
-    <div className="fixed top-0 left-0 z-50 w-full bg-gray-100 px-24 pt-8 pb-6">
-            <nav className="relative flex items-center justify-between sm:h-10 md:justify-center" aria-label="Global">
-                <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
-                    <div className="flex items-center justify-between w-full md:w-auto">
-                        <a href="/home">
-                          <span className="sr-only">Company Name</span>
-                          <img className="w-auto h-8 sm:h-10" src="https://www.svgrepo.com/show/448244/pack.svg" loading="lazy" width="202" height="40" />
-                        </a>
+    <div className="fixed top-0 left-0 z-50 w-full bg-gray-100 px-16 pt-8 pb-6">
+      <nav className="relative flex flex-row items-center justify-between sm:h-10">
+        {/* Left content */}
+        <div className="flex items-center gap-4 w-auto">
+          <a href="/home">
+            <img className="w-auto h-10" src="https://www.svgrepo.com/show/448244/pack.svg" loading="lazy" width="202" height="40" />
+          </a>
+          <p className="hidden md:block text-xl font-medium text-gray-500">
+            Notes App
+          </p>
+        </div>
 
-                        {/* Mobile menu button */}
-                        <div className="flex items-center -mr-2 md:hidden">
-                            <button className="inline-flex items-center justify-center p-2 text-gray-400 bg-gray-50 rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-50"  type="button" aria-expanded="false">
-                                <span className="sr-only">Open main menu</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true" className="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div className="hidden md:flex md:space-x-10 list-none">
-                    <li>
-                        <a href="#" className="text-base font-normal text-gray-500 list-none hover:text-gray-900"
-                            target="">Pricing</a>
-                    </li>
-                    <li>
-                        <a href="#" className="text-base font-normal text-gray-500 list-none hover:text-gray-900"
-                            target="">Gallary
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" className="text-base font-normal text-gray-500 list-none hover:text-gray-900"
-                            target="_blank">Blog
-                        </a>
-                    </li>
-                </div>
-                <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0 md:gap-4">
-                    <button type="button" className="text-secondary bg-white border-secondary border-3 font-medium rounded-lg text-md px-4 py-1.5 text-center">Sign up</button>
-                    <button type="button" className="text-white bg-secondary border-secondary border-3 font-medium rounded-lg text-md px-4 py-1.5 text-center">Log in</button>
-                </div>
-            </nav>
+        {/* Middle content */}
+        <div className="hidden md:flex md:gap-8 lg:gap-16">
+          <CustomLink href="/home">Home</CustomLink>
+          <CustomLink href="/home">Gallery</CustomLink>
+          <CustomLink href="/home">Blog</CustomLink>
+        </div>
+
+        {/* Right content */}
+        <div>
+          <div className="hidden md:flex md:gap-4">
+            <CustomButton type='secondary'>Sign up</CustomButton>
+            <CustomButton type='primary'>Log in</CustomButton>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="flex items-center -mr-2 md:hidden">
+            <button className="inline-flex items-center justify-center p-2 text-gray-400 bg-gray-50 rounded-md hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-50"  type="button" aria-expanded="false">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" aria-hidden className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
     </div>
   )
 }

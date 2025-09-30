@@ -29,7 +29,7 @@ export function useModalContext(): ModalContextProps {
   const context = useContext(ModalContext);
   if (typeof context === "undefined") {
     throw new Error(
-      "useUserContext should be used within the UserContext provider!"
+      "useModalContext should be used within the ModalContext provider."
     );
   }
   return context;
