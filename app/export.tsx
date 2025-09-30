@@ -1,25 +1,43 @@
+"use client";
 import React from "react";
+
 function FileExport({ canvas }) {
-  const export_canvas = () => {
+  const export_canvas = async () => {
     if (!canvas) return;
 
     const json = canvas.toJSON();
-    const blob = new Blob([JSON.stringify(json)], { type: "application/json" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "canvas.json"
-    link.click()
+
+    try {
+      const res = await fetch("/api/boards/export_board", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ board: json })
+
+      })
+
+
+      if (!res.ok) {
+        console.error("Failed to save:", await res.json());
+        return;
+      }
+
+      const data = await res.json();
+      console.log("Saved board:", data.board);
+
+    } catch (err) {
+      console.error("Error exporting canvas:", err);
+    }
   }
 
   return (
     <div className="file_export">
       <button onClick={export_canvas}>
-        Export Canvas
+        SAVE
       </button>
-
     </div>
-    
-  )
+  );
 }
 
-export default FileExport
+export default FileExport;
