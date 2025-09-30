@@ -26,7 +26,7 @@ const SignIn:React.FC<SignInProps> = ({ handleClose, handleState }) => {
     });
 
     if (res?.error) {
-      setError("Invalid email or password.");
+      setError(res.error);
     } else {
       handleClose();
     }
@@ -73,13 +73,13 @@ const SignIn:React.FC<SignInProps> = ({ handleClose, handleState }) => {
         { error && <p className="text-sm text-red-600">{error}</p> }
 
         {/* Reset password */}
-        <p className="mb-2 text-sm text-gray-500">
-          <a href="/forgot-password" className="text-blue-800 hover:text-blue-600">Reset your password?</a>
+        <p className="text-sm text-gray-500">
+          <a href="/forgot-password" className="text-blue-800 hover:text-blue-600">Forgot your password?</a>
         </p>
 
         {/* Submit button */}
         <button type="submit"
-          className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 
+          className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 mt-2
           text-sm font-medium text-white outline-none disabled:bg-gray-400
           hover:ring-1 hover:ring-black hover:ring-offset-1 hover:cursor-pointer">
           Continue

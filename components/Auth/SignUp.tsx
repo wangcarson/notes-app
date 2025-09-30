@@ -36,8 +36,6 @@ const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
 
     const data = await res.json();
     if (res.ok) {
-      console.log("User created:", data);
-      
       // Login
       const res = await signIn("credentials", {
         email,
@@ -45,13 +43,13 @@ const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
         redirect: false,
       });
       if (res?.error) {
-        setError("Invalid email or password.");
+        setError(res.error);
       } else {
         handleClose();
       }
 
     } else {
-      setError(data.error || "Something went wrong");
+      setError(data.error || "Signup failed");
     }
   }
 
@@ -101,14 +99,9 @@ const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
         {/* Error message */}
         { error && <p className="text-sm text-red-600">{error}</p> }
 
-        {/* Reset password */}
-        <p className="mb-2 text-sm text-gray-500">
-          <a href="/forgot-password" className="text-blue-800 hover:text-blue-600">Reset your password?</a>
-        </p>
-
         {/* Submit button */}
         <button type="submit"
-          className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 
+          className="inline-flex w-full items-center justify-center rounded-lg bg-black p-2 py-3 mt-2
           text-sm font-medium text-white outline-none disabled:bg-gray-400
           hover:ring-1 hover:ring-black hover:ring-offset-1 hover:cursor-pointer">
           Continue

@@ -15,15 +15,14 @@ export async function POST(req: NextRequest) {
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      console.log("User not found");
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+      return NextResponse.json({ error: "Email not found" }, { status: 401 });
     }
 
     // Compare password
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) {
       console.log("Passwords do not match");
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
+      return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
     }
 
     // Return user object (NextAuth expects at least an id)
@@ -33,6 +32,7 @@ export async function POST(req: NextRequest) {
       email: user.email,
       preferences: user.preferences || {},
     });
+    
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
