@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
     const { email, password } = await req.json();
 
     // Find user by email
-    console.log("Creating... ", email, password);
     const user = await User.findOne({ email });
     if (user) {
       return NextResponse.json({ error: "Email already in use" }, { status: 401 });
@@ -18,9 +17,9 @@ export async function POST(req: NextRequest) {
     // Create new user
     const passwordHash = await bcrypt.hash(password, 10);
     const newUser = await User.create({ email: email, passwordHash: passwordHash });
-    console.log(passwordHash, newUser.email, newUser.passwordHash);
 
     return NextResponse.json({ id: newUser._id, email: newUser.email });
+    
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
