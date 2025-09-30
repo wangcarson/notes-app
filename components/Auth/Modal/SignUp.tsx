@@ -3,7 +3,7 @@
 import { signIn } from 'next-auth/react';
 import React, { useState } from 'react';
 import OAuthButton from './OAuthButton';
-import FormField from './FormField';
+import FormField from './AuthField';
 
 type SignUpProps = {
   handleClose: () => void,

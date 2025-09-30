@@ -1,6 +1,6 @@
 "use client";
 
-import AuthModal from "@/components/Auth/AuthModal";
+import AuthModal from "@/components/Auth/Modal/AuthModal";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 

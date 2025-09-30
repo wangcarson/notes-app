@@ -1,4 +1,4 @@
-import AuthModal from "@/components/Auth/AuthModal";
+import AuthModal from "@/components/Auth/Modal/AuthModal";
 import { ModalProvider } from "@/context/ModalContext";
 import HomeNavbar from "@/components/Main/HomeNavbar";
 
