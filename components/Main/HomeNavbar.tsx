@@ -4,9 +4,7 @@ const HomeNavbar:React.FC = () => {
   
   return (
     // https://tailwindflex.com/@sophia-baker/minimalistic-header-navbar
-    <div className="fixed top-0 left-0 z-50 w-full bg-gray-100 px-24 py-4">
-      {/* <div className="px-4 mx-auto max-w-7xl sm:px-6">
-        <div className="relative pt-6 pb-16 sm:pb-24"> */}
+    <div className="fixed top-0 left-0 z-50 w-full bg-gray-100 px-24 pt-8 pb-6">
             <nav className="relative flex items-center justify-between sm:h-10 md:justify-center" aria-label="Global">
                 <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
                     <div className="flex items-center justify-between w-full md:w-auto">
@@ -42,12 +40,9 @@ const HomeNavbar:React.FC = () => {
                         </a>
                     </li>
                 </div>
-                <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
-                    <div className="inline-flex rounded-full shadow">
-                        <div className="inline-flex items-center px-4 py-2 text-base text-gray-900 bg-white border border-transparent rounded-full cursor-pointer font-base hover:bg-gray-50 ">
-                            Sign in
-                        </div>
-                    </div>
+                <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0 md:gap-4">
+                    <button type="button" className="text-secondary bg-white border-secondary border-3 font-medium rounded-lg text-md px-4 py-1.5 text-center">Sign up</button>
+                    <button type="button" className="text-white bg-secondary border-secondary border-3 font-medium rounded-lg text-md px-4 py-1.5 text-center">Log in</button>
                 </div>
             </nav>
     </div>
