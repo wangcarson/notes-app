@@ -5,8 +5,11 @@ import Image from "next/image";
 import * as fabric from "fabric";
 
 function Home() {
+
+  // canvas reference
   const canvasref = useRef(null)
   const [canvas, setCanvas] = useState(null)
+  // Load a small grid texture (e.g. 40x40 PNG or SVG)
 
   useEffect (() => {
     const fabriccanvas = new fabric.Canvas(canvasref.current, {
@@ -24,8 +27,7 @@ function Home() {
     fabriccanvas.freeDrawingBrush.color = "#000000"
     fabriccanvas.freeDrawingBrush.width = 5
     setCanvas(fabriccanvas)
-
-
+    
     return () => {
       fabriccanvas.dispose()
     }
