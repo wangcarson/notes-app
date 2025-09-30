@@ -15,12 +15,14 @@ export async function POST(req: NextRequest) {
     // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
+      console.log("User not found");
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
     // Compare password
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) {
+      console.log("Passwords do not match");
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 

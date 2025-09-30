@@ -23,7 +23,7 @@ const handler = NextAuth({
       },
       async authorize(credentials, req) {
         // Logic for verifying credentials
-        const res = await fetch(`/api/auth/verify`, {
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/verify`, {
           method: 'POST',
           body: JSON.stringify(credentials),
           headers: { "Content-Type": "application/json" }
@@ -35,7 +35,7 @@ const handler = NextAuth({
           return user;
         }
         // Return null if user data could not be retrieved
-        return null;
+        throw new Error(user.error || "Login failed");
       }
     }),
   ],

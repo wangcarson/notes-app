@@ -15,7 +15,7 @@ export default function Dashboard() {
       <AuthModal />
       { session ? (
         <div>
-          <p>Signed in as: {session.user?.name}</p>
+          <p>Signed in as: {session.user?.email}</p>
         </div>
       ) : (
         <div>
