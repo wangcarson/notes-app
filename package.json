@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "fabric": "^6.7.1",
     "mongodb": "^6.20.0",
     "mongoose": "^8.18.2",

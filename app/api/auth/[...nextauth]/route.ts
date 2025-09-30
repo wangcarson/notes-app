@@ -13,31 +13,31 @@ const handler = NextAuth({
     }),
 
     // Credentials: https://next-auth.js.org/configuration/providers/credentials
-    // CredentialsProvider({
-    //   // The name to display on the sign in form (e.g. 'Sign in with...')
-    //   name: 'Credentials',
-    //   // The credentials is used to generate a suitable form on the sign in page.
-    //   credentials: {
-    //     username: { label: "Username", type: "text", placeholder: "jsmith" },
-    //     password: { label: "Password", type: "password" }
-    //   },
-    //   async authorize(credentials, req) {
-    //     // Logic for verifying credentials
-    //     const res = await fetch("/your/endpoint", {
-    //       method: 'POST',
-    //       body: JSON.stringify(credentials),
-    //       headers: { "Content-Type": "application/json" }
-    //     });
-    //     const user = await res.json();
+    CredentialsProvider({
+      // The name to display on the sign in form
+      name: 'Credentials',
+      // The credentials is used to generate a suitable form on the sign in page.
+      credentials: {
+        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        password: { label: "Password", type: "password" }
+      },
+      async authorize(credentials, req) {
+        // Logic for verifying credentials
+        const res = await fetch(`/api/auth/verify`, {
+          method: 'POST',
+          body: JSON.stringify(credentials),
+          headers: { "Content-Type": "application/json" }
+        });
+        const user = await res.json();
 
-    //     // If no error and we have user data, return it
-    //     if (res.ok && user) {
-    //       return user;
-    //     }
-    //     // Return null if user data could not be retrieved
-    //     return null;
-    //   }
-    // }),
+        // If no error and we have user data, return it
+        if (res.ok && user) {
+          return user;
+        }
+        // Return null if user data could not be retrieved
+        return null;
+      }
+    }),
   ],
 })
 
