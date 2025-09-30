@@ -24,8 +24,7 @@ export async function POST(req: NextRequest) {
         }
 
 
-
-        const newBoard = await Board.create({ ...board, author: user._id });
+        const newBoard = await Board.create({ ...board, author: user._id, board: board});
 
         if (!user.boards) {
             user.boards = []

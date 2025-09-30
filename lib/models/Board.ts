@@ -10,7 +10,7 @@ const boardSchema = new mongoose.Schema({
     board: JSON
 }, {
     timestamps: true,
-    collection: "boards"
+    collection: "boards",
 });
 
 const Board = mongoose.models.Board || mongoose.model('Board', boardSchema);
