@@ -2,7 +2,7 @@ import React from 'react';
 
 type FormFieldProps = {
   name: string,
-  type: 'email' | 'password',
+  type: 'email' | 'password' | 'text',
   value: string,
   onChangeValue: (value: string) => void,
   placeholder?: string

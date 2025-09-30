@@ -4,8 +4,6 @@ import { signIn } from 'next-auth/react';
 import React, { useState } from 'react';
 import OAuthButton from './OAuthButton';
 import FormField from './FormField';
-import User from "@/lib/models/User";
-import { connectDB } from '@/lib/db';
 
 type SignUpProps = {
   handleClose: () => void,
@@ -13,6 +11,7 @@ type SignUpProps = {
 };
 
 const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -27,10 +26,9 @@ const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
       return;
     }
 
-    console.log("Checking...");
     const res = await fetch(`/api/auth/signup`, {
       method: "POST",
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ name, email, password }),
       headers: { "Content-Type": "application/json" },
     });
 
@@ -84,6 +82,10 @@ const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
       </div>
 
       <form onSubmit={handleCreate} className="w-full flex flex-col gap-2">
+        {/* Name */}
+        <FormField name="name" type="text" value={name} 
+          onChangeValue={setName} placeholder="Name" />
+
         {/* Email */}
         <FormField name="email" type="email" value={email} 
           onChangeValue={setEmail} placeholder="Email Address" />
