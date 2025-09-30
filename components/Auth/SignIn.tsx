@@ -22,7 +22,8 @@ const SignIn:React.FC<SignInProps> = ({ handleClose, handleState }) => {
     const res = await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      redirect: true,
+      callbackUrl: "/dashboard",
     });
 
     if (res?.error) {

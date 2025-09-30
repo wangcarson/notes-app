@@ -1,9 +1,22 @@
-import Link from 'next/link';
+"use client";
+
 import React from 'react';
 import CustomLink from '../Templates/CustomLink';
 import CustomButton from '../Templates/CustomButton';
+import { useModalContext } from '@/context/ModalContext';
 
 const HomeNavbar:React.FC = () => {
+  const { setModalState, setModalOpen } = useModalContext();
+
+  const onLogInClick = () => {
+    setModalState('signin');
+    setModalOpen(true);
+  };
+
+  const onSignUpClick = () => {
+    setModalState('signup');
+    setModalOpen(true);
+  };
   
   return (
     // https://tailwindflex.com/@sophia-baker/minimalistic-header-navbar
@@ -29,8 +42,8 @@ const HomeNavbar:React.FC = () => {
         {/* Right content */}
         <div>
           <div className="hidden md:flex md:gap-4">
-            <CustomButton type='secondary'>Sign up</CustomButton>
-            <CustomButton type='primary'>Log in</CustomButton>
+            <CustomButton type='secondary' onClick={onSignUpClick}>Sign up</CustomButton>
+            <CustomButton type='primary' onClick={onLogInClick}>Log in</CustomButton>
           </div>
 
           {/* Mobile menu button */}

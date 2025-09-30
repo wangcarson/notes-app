@@ -15,15 +15,6 @@ const AuthModal:React.FC = () => {
 
   return (
     <div className="flex items-center justify-center h-full w-full">
-      {/* Modal toggle */}
-      {/* https://flowbite.com/docs/components/modal/#form-element */}
-      <button onClick={handleOpen} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-        Sign In
-      </button>
-      <button onClick={() => signOut()} className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-        Sign Out
-      </button>
-
       {/* Main modal */}
       {/* https://tailwindflex.com/@r-thapa/login-popup-modal */}
       { modalOpen && ( 

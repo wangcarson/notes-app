@@ -5,14 +5,15 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Home() {
-  // const { data: session, status } = useSession();
-  // const router = useRouter();
+  const { status } = useSession();
+  const router = useRouter();
   
-  // useEffect(() => {
-  //   if (status === "authenticated") {
-  //     router.push("/dashboard");
-  //   }
-  // }, [status, router]);
+  // push to dashboard if authenticated
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [status, router]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 h-500">
