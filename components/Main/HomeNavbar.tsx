@@ -20,7 +20,7 @@ const HomeNavbar:React.FC = () => {
   
   return (
     // https://tailwindflex.com/@sophia-baker/minimalistic-header-navbar
-    <div className="fixed top-0 left-0 z-50 w-full bg-gray-100 px-16 pt-8 pb-6">
+    <div className="fixed top-0 left-0 z-50 w-full bg-white px-16 pt-8 pb-6">
       <nav className="relative flex flex-row items-center justify-between sm:h-10">
         {/* Left content */}
         <div className="flex items-center gap-4 w-auto">
@@ -35,15 +35,19 @@ const HomeNavbar:React.FC = () => {
         {/* Middle content */}
         <div className="hidden md:flex md:gap-8 lg:gap-16">
           <CustomLink href="/home">Home</CustomLink>
-          <CustomLink href="/home">Gallery</CustomLink>
-          <CustomLink href="/home">Blog</CustomLink>
+          <CustomLink href="/">Gallery</CustomLink>
+          <CustomLink href="/dashboard">Blog</CustomLink>
         </div>
 
         {/* Right content */}
         <div>
           <div className="hidden md:flex md:gap-4">
-            <CustomButton type='secondary' onClick={onSignUpClick}>Sign up</CustomButton>
-            <CustomButton type='primary' onClick={onLogInClick}>Log in</CustomButton>
+            <CustomButton colour='customgreen' outline className='w-[95px] px-4 py-1.5' onClick={onSignUpClick}>
+              Sign up
+            </CustomButton>
+            <CustomButton colour='customgreen' className='w-[95px] px-4 py-1.5' onClick={onLogInClick}>
+              Log in
+            </CustomButton>
           </div>
 
           {/* Mobile menu button */}

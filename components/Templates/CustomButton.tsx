@@ -1,22 +1,25 @@
 import React from 'react';
 
 type ButtonProps = {
-  type: 'primary' | 'secondary',
+  colour: string,
+  hoverColour?: string,
+  outline?: boolean,
   onClick?: () => void,
   className?: string,
   children: React.ReactNode
 };
 
-const CustomButton:React.FC<ButtonProps> = ({ className, type, onClick, children }) => {
-  var buttonClasses: string;
-  if (type === 'primary') {
-    buttonClasses = `text-white bg-secondary border-secondary border-3`;
-  } else {
-    buttonClasses = `text-secondary bg-white border-secondary border-3`;
-  }
-  
+const CustomButton:React.FC<ButtonProps> = ({ className, colour, hoverColour, outline, onClick, children }) => {
+  var buttonClass = outline
+    ? `bg-white text-${colour} border-${colour} border-3 hover:bg-gray-100`
+    : `bg-${colour} text-white border-${colour} border-3 hover:bg-${hoverColour ?? colour}`
+
   return (
-    <button type="button" className={`${buttonClasses} ${className} font-medium rounded-lg text-md px-4 py-1.5 text-center hover:cursor-pointer`} onClick={onClick}>
+    <button 
+      type="button" 
+      className={`${buttonClass} ${className} font-medium rounded-lg text-md text-center hover:cursor-pointer`} 
+      onClick={onClick}
+    >
       {children}
     </button>
   );

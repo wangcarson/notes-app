@@ -6,6 +6,8 @@ import { getToken } from "next-auth/jwt";
 // https://nextjs.org/docs/14/app/building-your-application/routing/middleware
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl;
+
+  // Get jwt token
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
 
   // Redirect to dashboard if authenticated
@@ -21,6 +23,7 @@ export async function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
+// Apply to dashboard and home pages (for now)
 export const config = {
   matcher: ["/dashboard", "/home"],
 };
