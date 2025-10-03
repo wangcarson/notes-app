@@ -1,20 +1,36 @@
 "use client";
 
-import { signOut, useSession } from 'next-auth/react';
-import { useEffect, useState } from "react";
+import { signIn } from 'next-auth/react';
+import { useEffect } from "react";
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import { useModalContext } from '@/context/ModalContext';
+import { useSearchParams } from 'next/navigation';
+import toast, { Toaster } from 'react-hot-toast';
 
 const AuthModal:React.FC = () => {
   const { modalState, modalOpen, setModalState, setModalOpen } = useModalContext();
 
-  const handleOpen = () => setModalOpen(true);
   const handleClose = () => setModalOpen(false);
   const handleState = (state: 'signin' | 'signup') => setModalState(state);
 
+  const handleGoogle = async () => {
+    await signIn("google", { redirect: false });
+  };
+
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const err = searchParams.get("error");
+    if (err === "provider_mismatch") {
+      setModalOpen(true);
+      toast.error("Error: Email used with another provider");
+    }
+  }, [searchParams]);
+
   return (
     <div className="flex items-center justify-center h-full w-full">
+      <Toaster />
+
       {/* Main modal */}
       {/* https://tailwindflex.com/@r-thapa/login-popup-modal */}
       { modalOpen && ( 
@@ -31,9 +47,9 @@ const AuthModal:React.FC = () => {
                     </button>
 
                     { modalState == 'signin' ? (
-                      <SignIn handleClose={handleClose} handleState={handleState}/>
+                      <SignIn handleClose={handleClose} handleState={handleState} handleGoogle={handleGoogle}/>
                     ) : (
-                      <SignUp handleClose={handleClose} handleState={handleState}/>
+                      <SignUp handleClose={handleClose} handleState={handleState} handleGoogle={handleGoogle}/>
                     ) }
                 </div>
             </div>

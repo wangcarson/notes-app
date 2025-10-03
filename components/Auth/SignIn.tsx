@@ -9,9 +9,10 @@ import { useSearchParams } from 'next/navigation';
 type SignInProps = {
   handleClose: () => void,
   handleState: (state: 'signin' | 'signup') => void,
+  handleGoogle: () => void,
 };
 
-const SignIn:React.FC<SignInProps> = ({ handleClose, handleState }) => {
+const SignIn:React.FC<SignInProps> = ({ handleClose, handleState, handleGoogle }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -32,19 +33,6 @@ const SignIn:React.FC<SignInProps> = ({ handleClose, handleState }) => {
       handleClose();
     }
   }
-
-  const handleGoogle = async () => {
-    await signIn("google", { redirect: false });
-  };
-
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    const err = searchParams.get("error");
-    if (err === "provider_mismatch") {
-      
-      setError("This email is already used with another provider.");
-    }
-  }, [searchParams]);
 
   return (
     <div className="p-5">

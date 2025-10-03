@@ -8,9 +8,10 @@ import FormField from './AuthField';
 type SignUpProps = {
   handleClose: () => void,
   handleState: (state: 'signin' | 'signup') => void,
+  handleGoogle: () => void,
 };
 
-const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
+const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState, handleGoogle }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,15 +51,6 @@ const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
       setError(data.error || "Signup failed");
     }
   }
-
-  const handleGoogle = async () => {
-    const res = await signIn("google", { redirect: false });
-    if (res?.error) {
-      setError(res.error); // show inline in modal
-    } else {
-      handleClose(); // success
-    }
-  };
 
   return (
     <div className="p-5">
