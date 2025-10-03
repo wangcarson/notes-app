@@ -1,9 +1,10 @@
 "use client";
 
 import { signIn } from 'next-auth/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import OAuthButton from './OAuthButton';
 import FormField from './AuthField';
+import { useSearchParams } from 'next/navigation';
 
 type SignInProps = {
   handleClose: () => void,
@@ -22,8 +23,7 @@ const SignIn:React.FC<SignInProps> = ({ handleClose, handleState }) => {
     const res = await signIn("credentials", {
       email,
       password,
-      redirect: true,
-      callbackUrl: "/dashboard",
+      redirect: false,
     });
 
     if (res?.error) {
@@ -32,6 +32,19 @@ const SignIn:React.FC<SignInProps> = ({ handleClose, handleState }) => {
       handleClose();
     }
   }
+
+  const handleGoogle = async () => {
+    await signIn("google", { redirect: false });
+  };
+
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const err = searchParams.get("error");
+    if (err === "provider_mismatch") {
+      
+      setError("This email is already used with another provider.");
+    }
+  }, [searchParams]);
 
   return (
     <div className="p-5">
@@ -50,7 +63,7 @@ const SignIn:React.FC<SignInProps> = ({ handleClose, handleState }) => {
           <img src="logo_github.png" alt="github" className="h-[18px] w-[18px]"></img>
           Continue with GitHub
         </OAuthButton>
-        <OAuthButton onClick={() => signIn('google')}>
+        <OAuthButton onClick={handleGoogle}>
           <img src="logo_google.png" alt="google" className="h-[18px] w-[18px]"></img>
           Continue with Google
         </OAuthButton>

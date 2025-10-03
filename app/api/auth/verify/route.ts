@@ -1,12 +1,12 @@
 // app/api/auth/verify/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/db";
+import { dbConnect } from "@/lib/db";
 import User from "@/lib/models/User";
 const bcrypt = require('bcrypt');
 
 export async function POST(req: NextRequest) {
   try {
-    await connectDB();
+    await dbConnect();
 
     // Get request email and password
     const body = await req.json();
@@ -14,14 +14,18 @@ export async function POST(req: NextRequest) {
 
     // Find user by email
     const user = await User.findOne({ email });
+
+    // Verify email
     if (!user) {
       return NextResponse.json({ error: "Email not found" }, { status: 401 });
+    }
+    if (!user.passwordHash) {
+      return NextResponse.json({ error: "Email used with OAuth provider" }, { status: 401 });
     }
 
     // Compare password
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) {
-      console.log("Passwords do not match");
       return NextResponse.json({ error: "Incorrect password" }, { status: 401 });
     }
 
@@ -30,7 +34,6 @@ export async function POST(req: NextRequest) {
       id: user._id.toString(),
       name: user.name,
       email: user.email,
-      preferences: user.preferences || {},
     });
     
   } catch (err) {

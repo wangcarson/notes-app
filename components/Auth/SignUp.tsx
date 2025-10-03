@@ -38,8 +38,7 @@ const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
       const res = await signIn("credentials", {
         email,
         password,
-        redirect: true,
-        callbackUrl: "/dashboard",
+        redirect: false,
       });
       if (res?.error) {
         setError(res.error);
@@ -51,6 +50,15 @@ const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
       setError(data.error || "Signup failed");
     }
   }
+
+  const handleGoogle = async () => {
+    const res = await signIn("google", { redirect: false });
+    if (res?.error) {
+      setError(res.error); // show inline in modal
+    } else {
+      handleClose(); // success
+    }
+  };
 
   return (
     <div className="p-5">
@@ -69,7 +77,7 @@ const SignUp:React.FC<SignUpProps> = ({ handleClose, handleState }) => {
           <img src="logo_github.png" alt="github" className="h-[18px] w-[18px]"></img>
           Continue with GitHub
         </OAuthButton>
-        <OAuthButton onClick={() => signIn('google')}>
+        <OAuthButton onClick={handleGoogle}>
           <img src="logo_google.png" alt="google" className="h-[18px] w-[18px]"></img>
           Continue with Google
         </OAuthButton>

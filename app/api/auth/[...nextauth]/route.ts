@@ -1,9 +1,11 @@
-import NextAuth from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
+import { dbConnect } from "@/lib/db";
+import User from "@/lib/models/User";
 
 // https://next-auth.js.org/getting-started/example
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     // OAuth: https://next-auth.js.org/configuration/providers/oauth
@@ -39,7 +41,60 @@ const handler = NextAuth({
       }
     }),
   ],
-})
 
+  // Callbacks: https://next-auth.js.org/configuration/callbacks
+  callbacks: {
+    // Control if a user is able to sign in
+    async signIn({ user, account, profile }) {
+      await dbConnect();
+
+      if (account?.provider === 'google') {
+        // Check if user already exists
+        var existingUser = await User.findOne({ email: user.email });
+
+        if (!existingUser) {
+          // Create new user if needed
+          existingUser = await User.create({
+            name: profile?.name,
+            email: user.email,
+            provider: 'google',
+            identities: [{
+              provider: 'google',
+              providerUserId: profile?.sub
+            }],
+          });
+
+        } else if (existingUser.provider != 'google') {
+          // Return to modal if email used with other provider
+          return '/home?error=provider_mismatch'
+        }
+
+        user.id = existingUser._id.toString();
+      }
+      return true;
+    },
+
+    // https://next-auth.js.org/configuration/callbacks#jwt-callback
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+
+    // https://next-auth.js.org/configuration/callbacks#session-callback
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id;
+      }
+      return session;
+    },
+  },
+  
+  session: {
+    strategy: "jwt"
+  },
+}
+
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST }
-

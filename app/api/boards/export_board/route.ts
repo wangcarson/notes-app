@@ -1,34 +1,29 @@
 // app/api/boards/export_board
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { connectDB } from "@/lib/db";
+import { dbConnect } from "@/lib/db";
 import Board from "@/lib/models/Board";
 import User from "@/lib/models/User";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(req: NextRequest) {
     try {
-        await connectDB();
-
-        const session = await getServerSession();
-
-        if (!session?.user?.email) {
+        // Get user session
+        const session = await getServerSession(authOptions);
+        if (!session?.user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
-
-        const { board } = await req.json();
-
+        
         // Find user by email
-        const user = await User.findOne({ email: session?.user?.email });
+        await dbConnect();
+        const user = await User.findOne({ _id: session.user.id });
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
-
-
+        
+        // Upload board to database
+        const { board } = await req.json();
         const newBoard = await Board.create({ ...board, author: user._id, board: board});
-
-        if (!user.boards) {
-            user.boards = []
-        }
 
         // Link board to user
         user.boards.push(newBoard._id);
