@@ -50,7 +50,7 @@ const boardSchema = new mongoose.Schema({
     collection: "boards",
 });
 
-const Board = mongoose.models.User || mongoose.model('Board', boardSchema);
+const Board = mongoose.models.Board || mongoose.model('Board', boardSchema);
 export default Board;
 
 // Helper functions

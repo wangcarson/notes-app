@@ -32,7 +32,7 @@ function FileExport({ canvas }) {
   }
 
   return (
-    <div className="file_export">
+    <div className="fileExport">
       <button onClick={export_canvas}>
         SAVE
       </button>
