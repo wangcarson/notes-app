@@ -1,3 +1,4 @@
+import BoardCanvas from '@/components/Board/Canvas';
 import { BoardData } from '@/lib/models/Board';
 import { NextPage } from 'next'
 import { NextRequest } from 'next/server';
@@ -15,7 +16,7 @@ const BoardPage: NextPage<Props> = async ({ params }) => {
     if (res.ok) {
         const board: BoardData = await res.json();
         return (
-            <div>{ board.author.name }</div>
+            <BoardCanvas board={board} />
         );
 
     } else {
