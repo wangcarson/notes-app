@@ -8,7 +8,7 @@ import { BoardData } from '@/lib/models/Board';
 
 interface Props {
     board?: BoardData
-}
+};
 
 const BoardCanvas: NextPage<Props> = ({ board }) => {
     // Canvas reference
