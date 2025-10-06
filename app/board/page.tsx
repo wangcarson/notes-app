@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef} from "react";
 import Image from "next/image";
 import * as fabric from "fabric";
-import FileExport from "@/components/Board/export";
-import FileImport from "@/components/Board/import";
+import FileExport from "@/components/Board/FileExport";
+import FileImport from "@/components/Board/FileImport";
 
 function Home() {
 

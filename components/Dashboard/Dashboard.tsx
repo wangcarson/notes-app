@@ -15,7 +15,6 @@ interface Props {
 const Dashboard: NextPage<Props> = ({ boards }) => {
   const sidebarWidth = 240;
   const headerHeight = 64;
-  console.log(boards);
 
   return (
     <div className="bg-red-100 min-h-screen flex flex-row">
