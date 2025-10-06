@@ -16,8 +16,15 @@ const Dashboard: NextPage<Props> = ({ boards }) => {
   const sidebarWidth = 240;
   const headerHeight = 64;
 
+  const handleCreate = async () => {
+    // TODO: 
+    // Generate unique ID
+    // Send to API (create new endpoints for saving and creating)
+    // Redirect to page
+  }
+
   return (
-    <div className="bg-red-100 min-h-screen flex flex-row">
+    <div className="min-h-screen flex flex-row">
       <Sidebar width={sidebarWidth} />
 
       <div
@@ -27,13 +34,17 @@ const Dashboard: NextPage<Props> = ({ boards }) => {
         <Header left={sidebarWidth} height={headerHeight} />
 
         {/* Main content */}
-        <div className="h-full p-6 bg-green-100 flex flex-col gap-6" style={{ marginTop: headerHeight }}>
+        <div className="h-full p-6 flex flex-col gap-6" style={{ marginTop: headerHeight }}>
 
-          <div className="bg-purple-100 w-full flex flex-row justify-between">
+          <div className="w-full flex flex-row justify-between">
             <p className="text-2xl">Recent boards and documents</p>
 
             {/* Create board */}
-            <CustomButton colour="customgreen" className="pr-2 flex flex-row items-center rounded-sm">
+            <CustomButton 
+              colour="green" 
+              className="pr-2 flex flex-row items-center rounded-sm"
+              onClick={handleCreate}
+            >
               <svg className="h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5"/>
               </svg>
@@ -42,10 +53,12 @@ const Dashboard: NextPage<Props> = ({ boards }) => {
           </div>
 
           {/* Filters */}
-          <div className="bg-purple-100 w-full flex flex-row justify-between items-center gap-4">
-            <div className="inline-flex gap-8">
-              <div className="inline-flex text-sm text-gray-600 items-center gap-2 flex-wrap">
-                Filter by 
+          <div className="w-full flex justify-between items-center gap-4">
+            <div className="flex gap-8 text-gray-600 text-sm">
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="text-nowrap">
+                  Filter by 
+                </div>
                 <Filter>
                   All boards
                 </Filter>
@@ -54,7 +67,7 @@ const Dashboard: NextPage<Props> = ({ boards }) => {
                 </Filter>
               </div>
 
-              <div className="inline-flex text-sm text-gray-600 items-center gap-2">
+              <div className="flex items-center gap-2">
                 <div className="text-nowrap">
                   Sort by 
                 </div>
@@ -64,7 +77,7 @@ const Dashboard: NextPage<Props> = ({ boards }) => {
               </div>
             </div>
 
-            <div className="min-w-16 bg-white">
+            <div className="min-w-16">
               End
             </div>
           </div>

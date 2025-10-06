@@ -42,10 +42,10 @@ const HomeNavbar:React.FC = () => {
         {/* Right content */}
         <div>
           <div className="hidden md:flex md:gap-4">
-            <CustomButton colour='customgreen' outline className='w-[95px] px-4 py-1.5' onClick={onSignUpClick}>
+            <CustomButton colour='green' outline className='w-[95px] px-4 py-1.5' onClick={onSignUpClick}>
               Sign up
             </CustomButton>
-            <CustomButton colour='customgreen' className='w-[95px] px-4 py-1.5' onClick={onLogInClick}>
+            <CustomButton colour='green' className='w-[95px] px-4 py-1.5' onClick={onLogInClick}>
               Log in
             </CustomButton>
           </div>
