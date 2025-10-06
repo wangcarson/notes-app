@@ -10,7 +10,7 @@ function Home() {
   // canvas reference
   const canvasref = useRef(null)
   const [canvas, setCanvas] = useState(null)
-  // Load a small grid texture (e.g. 40x40 PNG or SVG)
+
 
   useEffect (() => {
     const fabriccanvas = new fabric.Canvas(canvasref.current, {
