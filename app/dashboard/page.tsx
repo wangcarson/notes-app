@@ -4,10 +4,11 @@ import Sidebar from "@/components/Dashboard/Sidebar";
 import { BoardData } from "@/lib/models/Board";
 import { NextRequest } from "next/server";
 import { getBoardsByUser } from "../actions";
+import { Toaster } from "react-hot-toast";
 
 export default async function DashboardPage() {
     // Fetch data on the server
-    const boards = await getBoardsByUser() ?? [];
+    const boards = await getBoardsByUser();
 
     // Pass to client component
     const sidebarWidth = 240;
@@ -21,6 +22,7 @@ export default async function DashboardPage() {
                 className="flex flex-col grow lg:ml-[var(--sidebar-padding)]"
                 style={{ '--sidebar-padding': `${sidebarWidth}px` } as React.CSSProperties}
             >
+                <Toaster />
                 <Header left={sidebarWidth} height={headerHeight} />
 
                 {/* Main content */}

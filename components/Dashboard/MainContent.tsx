@@ -1,6 +1,6 @@
 "use client";
 
-import { createBoard } from "@/app/actions";
+import { addBoardCollaborator, createBoard, deleteBoard, getBoardsByUser } from "@/app/actions";
 import RecentsTable from "@/components/Dashboard/RecentsTable";
 import Filter from "@/components/Dashboard/Filter";
 import CustomButton from "@/components/Templates/CustomButton";
@@ -8,6 +8,7 @@ import { BoardData } from "@/lib/models/Board";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
 import TableFilters from "./TableFilters";
+import toast from "react-hot-toast";
 
 interface Props {
     top: number,
@@ -22,6 +23,29 @@ const MainContent: NextPage<Props> = ({ top, boards }) => {
 
       if (board) {
           router.push(`/board/${board._id}`);
+      }
+  }
+
+  const handleAdd = async (
+    board: BoardData, 
+    user_id: string = '68e03356f3a48e0f086b51ef',
+    user_name: string = 'Carson Wang',
+  ) => {
+      const success = await addBoardCollaborator(board._id, user_id, user_name);
+      if (success) {
+          toast.success("Added collaborator!");
+      } else {
+          toast.error("Failed to add collaborator");
+      }
+  }
+
+  const handleDelete = async (board: BoardData) => {
+      const success = await deleteBoard(board._id);
+      if (success) {
+          toast.success("Deleted board!");
+          router.refresh();
+      } else {
+          toast.error("Failed to delete board");
       }
   }
 
@@ -47,7 +71,7 @@ const MainContent: NextPage<Props> = ({ top, boards }) => {
       {/* Filters */}
       <TableFilters />
 
-      <RecentsTable boards={boards} />
+      <RecentsTable boards={boards} handleAdd={handleAdd} handleDelete={handleDelete} />
     </div>
   );
 }

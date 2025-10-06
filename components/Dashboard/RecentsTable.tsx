@@ -5,10 +5,12 @@ import TableItem from './TableItem';
 import { BoardData } from '@/lib/models/Board';
 
 interface Props {
-    boards: BoardData[]
+    boards: BoardData[],
+    handleAdd: (board: BoardData) => void,
+    handleDelete: (board: BoardData) => void,
 }
 
-const RecentsTable: NextPage<Props> = ({ boards }) => {
+const RecentsTable: NextPage<Props> = ({ boards, handleAdd, handleDelete }) => {
     if (boards.length) {
         return (
             <div className="flex flex-col gap-2">
@@ -23,7 +25,12 @@ const RecentsTable: NextPage<Props> = ({ boards }) => {
 
                 {/* Boards */}
                 { boards.map(board => (
-                    <TableItem key={board._id} board={board} />     
+                    <TableItem 
+                        key={board._id} 
+                        board={board} 
+                        handleAdd={() => handleAdd(board)}
+                        handleDelete={() => handleDelete(board)}
+                    />     
                 ))}
             </div>
         );

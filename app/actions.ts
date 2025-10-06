@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from './api/auth/[...nextauth]/route';
 import { dbConnect } from '@/lib/db';
 import User from '@/lib/models/User';
-import Board, { BoardData, documentToBoard } from '@/lib/models/Board';
+import Board, { BoardData, BoardUser, documentToBoard } from '@/lib/models/Board';
 import mongoose from 'mongoose';
 
 /**
@@ -38,7 +38,7 @@ async function getBoardDocument(board_id: string, user: any, options?: { verifyI
     // Make sure user has access to board
     const boardData = documentToBoard(board);
     if (boardData.author.id != user.id && (options?.verifyIsAuthor || !boardData.collaborators.map(e => e.id).includes(user.id))) {
-        throw new Error("Unauthorized access to board");
+        throw new Error("Unauthorized action");
     }
 
     return board;
@@ -90,7 +90,7 @@ export async function getBoardById(board_id: string) {
 /**
  * Fetch all boards for the current user
  * @param board_id 
- * @returns Returns an array of BoardData objects if success, otherwise undefined
+ * @returns Returns an array of BoardData objects
  */
 export async function getBoardsByUser() {    
     try {
@@ -108,11 +108,12 @@ export async function getBoardsByUser() {
 
     } catch (err) {
         console.error(err);
+        return [];
     }
 }
 
 /**
- * Save board for current user
+ * Update JSON of board
  * @param board_id 
  * @param json 
  * @returns Returns true if success, otherwise false
@@ -124,6 +125,74 @@ export async function updateBoardData(board_id: string, json: JSON) {
 
         // Save board
         board.board = json;
+        await board.save();
+        return true;
+    
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+/**
+ * Update name of board
+ * @param board_id 
+ * @param json 
+ * @returns Returns true if success, otherwise false
+ */
+export async function updateBoardTitle(board_id: string, title: string) {
+    try {
+        const user = await getUserDocument();
+        const board = await getBoardDocument(board_id, user);
+
+        // Save board
+        board.title = title;
+        await board.save();
+        return true;
+    
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+/**
+ * Add collaborator to board
+ * @param board_id 
+ * @param uid
+ * @param name 
+ * @returns Returns true if success, otherwise false
+ */
+export async function addBoardCollaborator(board_id: string, user_id: string, user_name: string) {
+    try {
+        const user = await getUserDocument();
+        const board = await getBoardDocument(board_id, user);
+
+        // Save board
+        // TODO: Verify not an author or collaborator already
+        board.collaborators.push({ id: user_id, name: user_name });
+        await board.save();
+        return true;
+    
+    } catch (err) {
+        console.error(err);
+        return false;
+    }
+}
+
+/**
+ * Remove collaborator from board
+ * @param board_id 
+ * @param uid 
+ * @returns Returns true if success, otherwise false
+ */
+export async function removeBoardCollaborator(board_id: string, user_id: string) {
+    try {
+        const user = await getUserDocument();
+        const board = await getBoardDocument(board_id, user);
+
+        // Save board
+        board.collaborators = board.collaborators.filter((e: any) => e.id != user_id);
         await board.save();
         return true;
     

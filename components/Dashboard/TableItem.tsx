@@ -1,13 +1,17 @@
+import { addBoardCollaborator, deleteBoard } from '@/app/actions';
 import { BoardData } from '@/lib/models/Board';
 import { NextPage } from 'next'
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 interface Props {
     board: BoardData,
+    handleAdd: () => void,
+    handleDelete: () => void,
 }
 
-const TableItem: NextPage<Props> = ({ board }) => {
+const TableItem: NextPage<Props> = ({ board, handleAdd, handleDelete }) => {
     const router = useRouter();
 
     const { data: session } = useSession();
@@ -53,7 +57,7 @@ const TableItem: NextPage<Props> = ({ board }) => {
 
             <div className="flex-none h-4 flex items-center gap-2">
                 {/* Favourite */}
-                <div className="flex w-6 h-6 rounded-sm justify-center items-center hover:bg-gray-200 cursor-pointer">
+                <div onClick={handleAdd} className="flex w-6 h-6 rounded-sm justify-center items-center hover:bg-gray-200 cursor-pointer">
                     { uid && board.likedBy.includes(uid) ? (
                         <svg className="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
@@ -66,7 +70,7 @@ const TableItem: NextPage<Props> = ({ board }) => {
                 </div>
 
                 {/* More details */}
-                <div className="flex w-6 h-6 rounded-sm justify-center items-center hover:bg-gray-200 cursor-pointer">
+                <div onClick={handleDelete} className="flex w-6 h-6 rounded-sm justify-center items-center hover:bg-gray-200 cursor-pointer">
                     <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" d="M6 12h.01m6 0h.01m5.99 0h.01"/>
                     </svg>
