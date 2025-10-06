@@ -19,7 +19,7 @@ const BoardTable: NextPage<Props> = ({ boards }) => {
 
             {/* Boards */}
             { boards.map((board: BoardData) => (
-                <BoardItem board={board} />     
+                <BoardItem key={board.id} board={board} />     
             ))}
         </div>
     );
