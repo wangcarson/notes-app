@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef} from "react";
 import Image from "next/image";
 import * as fabric from "fabric";
-import FileExport from "./export";
+import FileExport from "../components/Board/export";
+import FileImport from "../components/Board/import";
 
 function Home() {
 
@@ -40,7 +41,9 @@ function Home() {
    <div style={{ display: "flex", flexDirection: "column"}}>
     <button onClick={()=> canvas.clear()}>CLEAR CANVAS</button>
     <FileExport canvas = {canvas}/>
+    <FileImport canvas = {canvas}/>
     <canvas ref = {canvasref} style={{border : "1px solid black"}}></canvas>
+
   </div>
 
   );

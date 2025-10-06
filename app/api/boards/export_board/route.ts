@@ -23,7 +23,13 @@ export async function POST(req: NextRequest) {
         
         // Upload board to database
         const { board } = await req.json();
-        const newBoard = await Board.create({ ...board, author: { id: user._id, name: user.name }, board: board});
+
+        // TODO: change temp inputs
+        const newBoard = await Board.create({ 
+            title: "my_board", // CHANGE
+            author: { id: user._id, name: user.name }, 
+            collaborators: [], // CHANGE
+            board: board});
 
         // Link board to user
         user.boards.push(newBoard._id);

@@ -30,15 +30,14 @@ export async function POST(req: NextRequest) {
         try {
             const curBoard = await Board.findById(allBoardIds[i]);
             if (curBoard) {
-            allBoards.push = curBoard.board; // assuming `board` field holds your data
+                allBoards.push(curBoard.board); // assuming `board` field holds your data
             }
         } catch (err) {
-            console.error(`Error loading board ${allBoardIds[i]}:`, err);
+            console.error("Error loading board ${allBoardIds[i]}:", err);
             continue;
         }
     }
-
-    return NextResponse.json(allBoards);
+    return NextResponse.json(allBoards); // returns a list of all boards
 
 
 
