@@ -2,45 +2,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { dbConnect } from "@/lib/db";
-import Board from "@/lib/models/Board";
+import Board, { BoardData, BoardUser, documentToBoard } from "@/lib/models/Board";
 import User from "@/lib/models/User";
 import { authOptions } from "../../auth/[...nextauth]/route";
+import mongoose from "mongoose";
 
-export async function POST(req: NextRequest) {
-    try {
+export async function GET(req?: NextRequest) {
+    try {        
         // Get user session
         const session = await getServerSession(authOptions);
         if (!session?.user) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
+        const uid = session.user.id;
         
-        // Find user by email
+        // Find user by id
         await dbConnect();
-        const user = await User.findOne({ _id: session.user.id });
+        const user = await User.findOne({ _id: uid });
         if (!user) {
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
         
-    // find all of user's boards
-    const allBoardIds = user.boards; // array of ObjectIds
+        // Find all boards
+        const boards = (await Board.find({
+            $or: [
+                { "author.id": new mongoose.Types.ObjectId(uid) },
+                { "collaborators.id": new mongoose.Types.ObjectId(uid) }
+            ]
+        })).map(documentToBoard);
 
-    const allBoards: string [] = [];
-
-    for (let i = 0; i < allBoardIds.length; i++) {
-        try {
-            const curBoard = await Board.findById(allBoardIds[i]);
-            if (curBoard) {
-            allBoards.push = curBoard.board; // assuming `board` field holds your data
-            }
-        } catch (err) {
-            console.error(`Error loading board ${allBoardIds[i]}:`, err);
-            continue;
-        }
-    }
-
-    return NextResponse.json(allBoards);
-
-
+        return NextResponse.json(boards);
 
     } catch (err) {
         console.error(err);

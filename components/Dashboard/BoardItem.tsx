@@ -1,28 +1,15 @@
+import { BoardData } from '@/lib/models/Board';
 import { NextPage } from 'next'
-
-export interface BoardUser {
-    id?: string,
-    name: string,
-}
-
-export interface BoardData {
-    id?: string,
-    title: string,
-    owner: BoardUser,
-    onlineUsers?: number,
-    createdAt?: Date,
-    lastOpened?: Date,
-    lastModified?: Date,
-    lastModifiedUser?: BoardUser,
-    isFavourite?: boolean,
-    location?: string,
-}
+import { useSession } from 'next-auth/react';
 
 interface Props {
     board: BoardData,
 }
 
 const BoardItem: NextPage<Props> = ({ board }) => {
+    const { data: session } = useSession();
+    const uid = session?.user.id;
+
     return (
         <div className="bg-white hover:bg-gray-100 w-full h-16 flex flex-row gap-10 items-center rounded-lg px-4">
 
@@ -36,9 +23,9 @@ const BoardItem: NextPage<Props> = ({ board }) => {
                     <p className="text-md font-bold">
                         { board.title }
                     </p>
-                    { board.lastModified && board.lastModifiedUser && (
+                    { board.updatedAt && board.updatedAtUser && (
                         <p className='text-sm'>
-                            Modified by { board.lastModifiedUser?.name } on { board.lastModified.toLocaleDateString() }
+                            Modified by { board.updatedAtUser?.name } on { board.updatedAt.toLocaleDateString() }
                         </p>
                     )}
                 </div>
@@ -48,16 +35,15 @@ const BoardItem: NextPage<Props> = ({ board }) => {
                 { board.onlineUsers }
             </div>
             <div className="flex-2 hidden 2xl:block text-sm">
-                { board.lastOpened?.toLocaleDateString() }
             </div>
             <div className="flex-2 hidden xl:block text-sm">
-                { board.owner.name }
+                { board.author.name }
             </div>
 
             <div className="flex-none h-4 flex items-center gap-2">
                 {/* Favourite */}
                 <div className="flex w-6 h-6 rounded-sm justify-center items-center hover:bg-gray-200 cursor-pointer">
-                    { board.isFavourite ? (
+                    { uid && board.likedBy.includes(uid) ? (
                         <svg className="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z"/>
                         </svg>

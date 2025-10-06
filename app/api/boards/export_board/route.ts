@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
         
-        // Find user by email
+        // Find user by id
         await dbConnect();
         const user = await User.findOne({ _id: session.user.id });
         if (!user) {

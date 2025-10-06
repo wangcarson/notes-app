@@ -1,5 +1,6 @@
 import { NextPage } from 'next'
-import BoardItem, { BoardData } from './BoardItem';
+import BoardItem from './BoardItem';
+import { BoardData } from '@/lib/models/Board';
 
 interface Props {
     boards: BoardData[]
@@ -18,8 +19,8 @@ const BoardTable: NextPage<Props> = ({ boards }) => {
             </div>
 
             {/* Boards */}
-            { boards.map((board: BoardData) => (
-                <BoardItem key={board.id} board={board} />     
+            { boards.map(board => (
+                <BoardItem key={board._id} board={board} />     
             ))}
         </div>
     );

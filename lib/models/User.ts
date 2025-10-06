@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export interface UserData {
-  id?: string;
+  _id?: string;
   name: string;
   email?: string;
   passwordHash?: string;
