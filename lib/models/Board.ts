@@ -16,10 +16,10 @@ export interface BoardData {
     author: BoardUser,
     collaborators: BoardUser[],
     board: JSON,
+    createdAt: Date,
+    updatedAt: Date,
 
     onlineUsers?: number,
-    createdAt?: Date,
-    updatedAt?: Date,
     updatedAtUser?: BoardUser,
     likedBy: string[], // ids only
 }
@@ -77,7 +77,7 @@ export function documentToBoard(data: any): BoardData {
         onlineUsers: data.onlineUsers,
         updatedAtUser,
         likedBy: data.likedBy || [],
-        createdAt: data.createdAt,
-        updatedAt: data.updatedAt,
+        createdAt: new Date(data.createdAt),
+        updatedAt: new Date(data.updatedAt),
     };
 }

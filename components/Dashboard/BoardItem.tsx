@@ -10,6 +10,12 @@ const BoardItem: NextPage<Props> = ({ board }) => {
     const { data: session } = useSession();
     const uid = session?.user.id;
 
+    const formattedDate = (new Date(board.updatedAt)).toLocaleDateString("en-US", { 
+        year: "numeric", 
+        month: "long", 
+        day: "numeric" 
+    });
+
     return (
         <div className="bg-white hover:bg-gray-100 w-full h-16 flex flex-row gap-10 items-center rounded-lg px-4">
 
@@ -23,20 +29,18 @@ const BoardItem: NextPage<Props> = ({ board }) => {
                     <p className="text-md font-bold">
                         { board.title }
                     </p>
-                    { board.updatedAt && board.updatedAtUser && (
-                        <p className='text-sm'>
-                            Modified by { board.updatedAtUser?.name } on { board.updatedAt.toLocaleDateString() }
-                        </p>
-                    )}
+                    <p className='text-sm'>
+                        Modified by { board.updatedAtUser?.name ?? board.author.name } on { formattedDate }
+                    </p>
                 </div>
             </div>
 
-            <div className="flex-2 hidden sm:block text-sm">
+            <div className="flex-2 hidden xl:block text-sm">
                 { board.onlineUsers }
             </div>
             <div className="flex-2 hidden 2xl:block text-sm">
             </div>
-            <div className="flex-2 hidden xl:block text-sm">
+            <div className="flex-2 hidden sm:block text-sm">
                 { board.author.name }
             </div>
 
