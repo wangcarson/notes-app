@@ -3,11 +3,11 @@
 import { Canvas, PencilBrush } from 'fabric';
 import { NextPage } from 'next'
 import { useEffect, useRef, useState } from 'react'
-import FileExport from './FileExport';
 import { BoardData } from '@/lib/models/Board';
+import { saveBoard } from '@/app/actions';
 
 interface Props {
-    board?: BoardData
+    board: BoardData
 };
 
 const BoardCanvas: NextPage<Props> = ({ board }) => {
@@ -31,7 +31,7 @@ const BoardCanvas: NextPage<Props> = ({ board }) => {
         });
 
         // Load from data if given
-        if (board) {
+        if (board?.board) {
             fabricCanvas.loadFromJSON(board.board);
         }
 
@@ -48,11 +48,28 @@ const BoardCanvas: NextPage<Props> = ({ board }) => {
         };
     }, []);
 
-    // TODO: Save instead of exporting
+    const handleSave = async () => {
+        if (!canvas) return;
+        const json = canvas.toJSON();
+
+        const success = await saveBoard(board._id, json);
+        if (success) {
+            console.log("Saved board:", board.title);
+        }
+    }
+
     return ( 
         <div className='flex flex-col'>
+            {/* Clear */}
             <button onClick={() => canvas!.clear()}>CLEAR CANVAS</button>
-            <FileExport canvas={canvas}/> 
+
+            {/* Save */}
+            <div className="fileExport">
+                <button onClick={handleSave}>
+                    SAVE
+                </button>
+            </div>
+
             <canvas ref={canvasRef} className="border-1 border-black"></canvas>
         </div>
     );
