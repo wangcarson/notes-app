@@ -26,10 +26,11 @@ export async function POST(req: NextRequest) {
 
         // TODO: change temp inputs
         const newBoard = await Board.create({ 
-            title: "my_board", // CHANGE
+            title: "Untitled Board", // CHANGE
             author: { id: user._id, name: user.name }, 
             collaborators: [], // CHANGE
-            board: board});
+            board: board
+        });
 
         // Link board to user
         user.boards.push(newBoard._id);
