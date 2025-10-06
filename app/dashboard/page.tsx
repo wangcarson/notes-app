@@ -3,11 +3,11 @@ import Header from "@/components/Dashboard/Header";
 import Sidebar from "@/components/Dashboard/Sidebar";
 import { BoardData } from "@/lib/models/Board";
 import { NextRequest } from "next/server";
+import { getBoardsByUser } from "../actions";
 
 export default async function DashboardPage() {
     // Fetch data on the server
-    const res = await import("@/app/api/boards/import_all/route");
-    const boards: BoardData[] = await (await res.GET({} as unknown as NextRequest)).json();
+    const boards = await getBoardsByUser() ?? [];
 
     // Pass to client component
     const sidebarWidth = 240;

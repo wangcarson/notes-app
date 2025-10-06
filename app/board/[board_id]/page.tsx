@@ -1,11 +1,7 @@
 import { getBoardById } from '@/app/actions';
 import CanvasPage from '@/components/Board/CanvasPage';
-import BoardCanvas from '@/components/Board/CanvasPage';
 import FallbackPage from '@/components/Board/FallbackPage';
-import { BoardData } from '@/lib/models/Board';
 import { NextPage } from 'next'
-import { NextRequest } from 'next/server';
-import { Toaster } from 'react-hot-toast';
 
 interface Props {
     params: { board_id: string }

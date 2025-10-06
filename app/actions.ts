@@ -5,6 +5,7 @@ import { authOptions } from './api/auth/[...nextauth]/route';
 import { dbConnect } from '@/lib/db';
 import User from '@/lib/models/User';
 import Board, { BoardData, documentToBoard } from '@/lib/models/Board';
+import mongoose from 'mongoose';
 
 /**
  * Fetch and validate user
@@ -29,13 +30,14 @@ async function getUserDocument() {
  * @param user
  * @returns Returns board document or throws error
  */
-async function getBoardDocument(board_id: string, user: any) {
+async function getBoardDocument(board_id: string, user: any, options?: { verifyIsAuthor: boolean }) {
     // Find board
     const board = await Board.findById(board_id);
     if (!board) throw Error("Board not found");
 
     // Make sure user has access to board
-    if (board_id && !user.boards.includes(board_id)) {
+    const boardData = documentToBoard(board);
+    if (boardData.author.id != user.id && (options?.verifyIsAuthor || !boardData.collaborators.map(e => e.id).includes(user.id))) {
         throw new Error("Unauthorized access to board");
     }
 
@@ -86,15 +88,23 @@ export async function getBoardById(board_id: string) {
 }
 
 /**
- * Fetch all board for a user
+ * Fetch all boards for the current user
  * @param board_id 
- * @returns Returns BoardData object if success, otherwise undefined
+ * @returns Returns an array of BoardData objects if success, otherwise undefined
  */
-export async function getBoardByUser(board_id: string) {    
+export async function getBoardsByUser() {    
     try {
         const user = await getUserDocument();
-        const board = await getBoardDocument(board_id, user);
-        return documentToBoard(board);
+        
+        // Find all boards
+        const boards = (await Board.find({
+            $or: [
+                { "author.id": new mongoose.Types.ObjectId(user.id as string) },
+                { "collaborators.id": new mongoose.Types.ObjectId(user.id as string) }
+            ]
+        })).map(documentToBoard);
+
+        return boards;
 
     } catch (err) {
         console.error(err);
@@ -121,4 +131,19 @@ export async function updateBoardData(board_id: string, json: JSON) {
         console.error(err);
         return false;
     }
+}
+
+export async function deleteBoard(board_id: string) {
+    try {
+        const user = await getUserDocument();
+        await getBoardDocument(board_id, user, { verifyIsAuthor: true });
+
+        // Save board
+        await Board.findByIdAndDelete(board_id);
+        return true;
+    
+    } catch (err) {
+        console.error(err);
+        return false;
+    } 
 }
