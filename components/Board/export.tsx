@@ -8,7 +8,7 @@ function FileExport({ canvas }) {
     const json = canvas.toJSON();
 
     try {
-      const res = await fetch("/api/boards/export_board", {
+      const res = await fetch("/api/boards/export", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

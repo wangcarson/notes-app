@@ -23,7 +23,7 @@ function FileImport({ canvas }) {
 
     const sampleImport = async () => {
         try {
-        const res = await fetch("/api/boards/import_boards", {
+        const res = await fetch("/api/boards/import_all", {
             method: "POST",
         });
         if (!res.ok) {
