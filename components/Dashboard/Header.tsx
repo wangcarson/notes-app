@@ -2,16 +2,20 @@ import { NextPage } from 'next'
 import { signOut } from 'next-auth/react';
 
 interface Props {
+    left: number,
     height: number,
 }
 
-const Header: NextPage<Props> = ({ height }) => {
+const Header: NextPage<Props> = ({ left, height }) => {
   const onLogOutClick = () => {
     signOut({ callbackUrl: "/home" });
   };
   
   return (
-    <div className={`fixed h-${height} w-full flex bg-yellow-100 flex-row justify-between items-center px-6 py-3 border-b-1 gap-12`}>
+    <div 
+        className="fixed top-0 right-0 flex bg-yellow-100 flex-row justify-between items-center px-6 py-3 border-b-1 gap-12 left-0 lg:left-[var(--left)]"
+        style={{ height: height, '--left': `${left}px` } as React.CSSProperties}
+    >
         <div className="flex gap-4">
             <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M5 7h14M5 12h14M5 17h14"/>

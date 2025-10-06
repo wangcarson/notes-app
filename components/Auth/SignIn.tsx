@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 import OAuthButton from './OAuthButton';
 import FormField from './AuthField';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 type SignInProps = {
   handleClose: () => void,
@@ -13,6 +13,8 @@ type SignInProps = {
 };
 
 const SignIn:React.FC<SignInProps> = ({ handleClose, handleState, handleGoogle }) => {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -30,7 +32,7 @@ const SignIn:React.FC<SignInProps> = ({ handleClose, handleState, handleGoogle }
     if (res?.error) {
       setError(res.error);
     } else {
-      handleClose();
+      router.push('/dashboard');
     }
   }
 

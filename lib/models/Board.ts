@@ -1,11 +1,17 @@
 import mongoose from 'mongoose';
 
 const boardSchema = new mongoose.Schema({
-    title: String,
+    title: { type: String, required: true },
     created: Date,
     updated: Date,
-    author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    collaborators: [String],
+    author: {
+        id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        name: { type: String, required: true },
+    },
+    collaborators: [{
+        id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        name: { type: String, required: true },
+    }],
     tags: [String],
     board: JSON
 }, {

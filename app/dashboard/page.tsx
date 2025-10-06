@@ -1,34 +1,43 @@
 "use client";
 
+import { BoardData } from "@/components/Dashboard/BoardItem";
+import BoardTable from "@/components/Dashboard/BoardTable";
 import Filter from "@/components/Dashboard/Filter";
 import Header from "@/components/Dashboard/Header";
+import Sidebar from "@/components/Dashboard/Sidebar";
 import CustomButton from "@/components/Templates/CustomButton";
 
 export default function Dashboard() {
 
-  const sidebarWidth = 60;
-  const headerHeight = 16;
+  const sidebarWidth = 240;
+  const headerHeight = 64;
   
+  const data: BoardData = {
+      title: "New board",
+      owner: { name: 'Me' },
+      lastOpened: new Date("2025-10-05"),
+      lastModified: new Date("2025-10-05"),
+      lastModifiedUser: { name: 'Me' }, 
+  }
+  const boards = [data, data, data];
+
   return (
     <div className="bg-red-100 min-h-screen flex flex-row">
-      {/* Sidebar */}
-      <div className={`fixed h-full hidden w-${sidebarWidth} lg:flex flex-col bg-blue-100 border-r-1`}>
-        Sidebar
-      </div>
+      <Sidebar width={sidebarWidth} />
 
-      <div className={`flex flex-col flex-1 ml-${sidebarWidth}`}>
+      <div
+        className="flex flex-col grow lg:ml-[var(--sidebar-padding)]"
+        style={{ '--sidebar-padding': `${sidebarWidth}px` } as React.CSSProperties}
+      >
+        <Header left={sidebarWidth} height={headerHeight} />
 
-        <Header height={headerHeight} />
-
-        <div className="h-full p-6 bg-green-100 flex flex-col gap-6">
-
-          <div className="bg-purple-100 w-full rounded-sm h-40 flex flex-row">
-            New document
-          </div>
+        {/* Main content */}
+        <div className="h-full p-6 bg-green-100 flex flex-col gap-6" style={{ marginTop: headerHeight }}>
 
           <div className="bg-purple-100 w-full flex flex-row justify-between">
             <p className="text-2xl">Recent boards and documents</p>
 
+            {/* Create board */}
             <CustomButton colour="customgreen" className="pr-2 flex flex-row items-center rounded-sm">
               <svg className="h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7 7V5"/>
@@ -37,6 +46,7 @@ export default function Dashboard() {
             </CustomButton>
           </div>
 
+          {/* Filters */}
           <div className="bg-purple-100 w-full flex flex-row justify-between items-center gap-4">
             <div className="inline-flex gap-8">
               <div className="inline-flex text-sm text-gray-600 items-center gap-2 flex-wrap">
@@ -64,13 +74,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="bg-purple-100 w-full rounded-sm flex flex-row flex-wrap overflow-hidden gap-10 h-1000">
-            <div className="flex-5 bg-orange-100">Name</div>
-            <div className="flex-2 bg-orange-100 hidden sm:block">Online users</div>
-            <div className="flex-2 bg-orange-100 hidden 2xl:block">Last opened</div>
-            <div className="flex-2 bg-orange-100 hidden xl:block">Owner</div>
-            <div className="flex-none bg-orange-100">More details</div>
-          </div>
+          <BoardTable boards={boards} />
         </div>
       </div>
     </div>
