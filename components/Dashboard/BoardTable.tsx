@@ -1,3 +1,5 @@
+"use client";
+
 import { NextPage } from 'next'
 import BoardItem from './BoardItem';
 import { BoardData } from '@/lib/models/Board';

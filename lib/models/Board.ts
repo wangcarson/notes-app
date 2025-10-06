@@ -56,7 +56,7 @@ export default Board;
 // Helper functions
 export function documentToBoardUser(data: any): BoardUser {
     return {
-        id: data.id.toString,
+        id: data.id.toString(),
         name: data.name
     };
 }

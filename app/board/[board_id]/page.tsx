@@ -8,11 +8,11 @@ interface Props {
 }
 
 const BoardPage: NextPage<Props> = async ({ params }) => {
-    const { board_id } = params;
+    const { board_id } = await params;
 
     const endpoint = await import('@/app/api/boards/import/[board_id]/route');
     const res = await endpoint.GET({} as unknown as NextRequest, { params: { board_id }});
-
+    
     if (res.ok) {
         const board: BoardData = await res.json();
         return (
