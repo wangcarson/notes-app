@@ -4,18 +4,35 @@ import { Canvas, PencilBrush } from 'fabric';
 import { NextPage } from 'next'
 import { useEffect, useRef, useState } from 'react'
 import { BoardData } from '@/lib/models/Board';
-import { saveBoard } from '@/app/actions';
+import { updateBoardData } from '@/app/actions';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface Props {
     board: BoardData
 };
 
-const BoardCanvas: NextPage<Props> = ({ board }) => {
+const CanvasPage: NextPage<Props> = ({ board }) => {
     // Canvas reference
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [canvas, setCanvas] = useState<Canvas | null>(null);
 
     useEffect(() => {
+        const fabricCanvas = initializeBoard();
+        if (!fabricCanvas) return;
+        
+        // Load from data if given
+        if (board?.board) {
+            fabricCanvas.loadFromJSON(board.board);
+        }
+        
+        setCanvas(fabricCanvas);
+        
+        return () => {
+            fabricCanvas.dispose();
+        };
+    }, []);
+
+    const initializeBoard = () => {
         if (!canvasRef.current) return;
 
         // Create fabric canvas
@@ -30,36 +47,30 @@ const BoardCanvas: NextPage<Props> = ({ board }) => {
             height: window.innerHeight
         });
 
-        // Load from data if given
-        if (board?.board) {
-            fabricCanvas.loadFromJSON(board.board);
-        }
-
         // Create brush
         const brush = new PencilBrush(fabricCanvas);
         brush.color = "#000000";
         brush.width = 5;
         fabricCanvas.freeDrawingBrush = brush;
-        
-        setCanvas(fabricCanvas);
-        
-        return () => {
-            fabricCanvas.dispose();
-        };
-    }, []);
+
+        return fabricCanvas;
+    }
 
     const handleSave = async () => {
         if (!canvas) return;
-        const json = canvas.toJSON();
+        const success = await updateBoardData(board._id, canvas.toJSON());
 
-        const success = await saveBoard(board._id, json);
         if (success) {
-            console.log("Saved board:", board.title);
+            toast.success("Saved board!");
+        } else {
+            toast.error("Failed to save board");
         }
     }
 
     return ( 
         <div className='flex flex-col'>
+            <Toaster />
+            
             {/* Clear */}
             <button onClick={() => canvas!.clear()}>CLEAR CANVAS</button>
 
@@ -74,4 +85,4 @@ const BoardCanvas: NextPage<Props> = ({ board }) => {
         </div>
     );
 }
-export default BoardCanvas;
+export default CanvasPage;

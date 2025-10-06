@@ -7,7 +7,7 @@ interface Props {
     board: BoardData,
 }
 
-const BoardItem: NextPage<Props> = ({ board }) => {
+const TableItem: NextPage<Props> = ({ board }) => {
     const router = useRouter();
 
     const { data: session } = useSession();
@@ -76,4 +76,4 @@ const BoardItem: NextPage<Props> = ({ board }) => {
     );
 }
 
-export default BoardItem;
+export default TableItem;

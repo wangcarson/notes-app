@@ -25,5 +25,5 @@ export async function middleware(request: NextRequest) {
 
 // Apply to dashboard and home pages (for now)
 export const config = {
-  matcher: ["/dashboard", "/home", "/"],
+  matcher: ["/dashboard", "/home"],
 };

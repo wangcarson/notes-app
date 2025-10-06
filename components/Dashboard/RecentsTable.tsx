@@ -1,14 +1,14 @@
 "use client";
 
 import { NextPage } from 'next'
-import BoardItem from './BoardItem';
+import TableItem from './TableItem';
 import { BoardData } from '@/lib/models/Board';
 
 interface Props {
     boards: BoardData[]
 }
 
-const BoardTable: NextPage<Props> = ({ boards }) => {
+const RecentsTable: NextPage<Props> = ({ boards }) => {
     if (boards.length) {
         return (
             <div className="flex flex-col gap-2">
@@ -23,7 +23,7 @@ const BoardTable: NextPage<Props> = ({ boards }) => {
 
                 {/* Boards */}
                 { boards.map(board => (
-                    <BoardItem key={board._id} board={board} />     
+                    <TableItem key={board._id} board={board} />     
                 ))}
             </div>
         );
@@ -34,4 +34,4 @@ const BoardTable: NextPage<Props> = ({ boards }) => {
     }
 }
 
-export default BoardTable;
+export default RecentsTable;

@@ -70,11 +70,27 @@ export async function createBoard(name?: string) {
 }
 
 /**
- * Load board using board ID
+ * Fetch board using board ID
  * @param board_id 
  * @returns Returns BoardData object if success, otherwise undefined
  */
-export async function loadBoard(board_id: string) {    
+export async function getBoardById(board_id: string) {    
+    try {
+        const user = await getUserDocument();
+        const board = await getBoardDocument(board_id, user);
+        return documentToBoard(board);
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+/**
+ * Fetch all board for a user
+ * @param board_id 
+ * @returns Returns BoardData object if success, otherwise undefined
+ */
+export async function getBoardByUser(board_id: string) {    
     try {
         const user = await getUserDocument();
         const board = await getBoardDocument(board_id, user);
@@ -91,7 +107,7 @@ export async function loadBoard(board_id: string) {
  * @param json 
  * @returns Returns true if success, otherwise false
  */
-export async function saveBoard(board_id: string, json: JSON) {
+export async function updateBoardData(board_id: string, json: JSON) {
     try {
         const user = await getUserDocument();
         const board = await getBoardDocument(board_id, user);

@@ -1,12 +1,13 @@
 "use client";
 
 import { createBoard } from "@/app/actions";
-import BoardTable from "@/components/Dashboard/BoardTable";
+import RecentsTable from "@/components/Dashboard/RecentsTable";
 import Filter from "@/components/Dashboard/Filter";
 import CustomButton from "@/components/Templates/CustomButton";
 import { BoardData } from "@/lib/models/Board";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
+import TableFilters from "./TableFilters";
 
 interface Props {
     top: number,
@@ -44,36 +45,9 @@ const MainContent: NextPage<Props> = ({ top, boards }) => {
       </div>
 
       {/* Filters */}
-      <div className="w-full flex justify-between items-center gap-4">
-        <div className="flex gap-8 text-gray-600 text-sm">
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="text-nowrap">
-              Filter by 
-            </div>
-            <Filter>
-              All boards
-            </Filter>
-            <Filter>
-              Owned by anyone
-            </Filter>
-          </div>
+      <TableFilters />
 
-          <div className="flex items-center gap-2">
-            <div className="text-nowrap">
-              Sort by 
-            </div>
-            <Filter>
-              Last opened
-            </Filter>
-          </div>
-        </div>
-
-        <div className="min-w-16">
-          End
-        </div>
-      </div>
-
-      <BoardTable boards={boards} />
+      <RecentsTable boards={boards} />
     </div>
   );
 }
