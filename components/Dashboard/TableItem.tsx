@@ -71,7 +71,7 @@ const TableItem: NextPage<Props> = ({ board, handleAdd, handleDelete }) => {
                     )}
                 </div>
 
-                {/* More details */}
+                {/* Delete */}
                 <div onClick={handleDelete} className="flex w-6 h-6 rounded-sm justify-center items-center hover:bg-gray-200 cursor-pointer">
                     <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                         <path stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" d="M6 12h.01m6 0h.01m5.99 0h.01"/>

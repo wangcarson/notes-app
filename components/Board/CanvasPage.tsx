@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, PencilBrush } from 'fabric';
+import { Canvas, PencilBrush, Point } from 'fabric';
 import { NextPage } from 'next'
 import { useEffect, useRef, useState } from 'react'
 import { BoardData } from '@/lib/models/Board';
@@ -15,6 +15,12 @@ const CanvasPage: NextPage<Props> = ({ board }) => {
     // Canvas reference
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const [canvas, setCanvas] = useState<Canvas | null>(null);
+    
+    // Pan and zoom state
+    const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [isPanning, setIsPanning] = useState(false);
+    const [lastPanPoint, setLastPanPoint] = useState({ x: 0, y: 0 });
 
     useEffect(() => {
         const fabricCanvas = initializeBoard();
@@ -27,8 +33,18 @@ const CanvasPage: NextPage<Props> = ({ board }) => {
         
         setCanvas(fabricCanvas);
         
+        // Listen for browser zoom changes
+        const handleBrowserZoom = () => {
+            const browserZoom = window.devicePixelRatio;
+            setZoom(browserZoom);
+        };
+        
+        window.addEventListener('resize', handleBrowserZoom);
+        handleBrowserZoom(); // Initial check
+        
         return () => {
             fabricCanvas.dispose();
+            window.removeEventListener('resize', handleBrowserZoom);
         };
     }, []);
 
@@ -67,21 +83,97 @@ const CanvasPage: NextPage<Props> = ({ board }) => {
         }
     }
 
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isPanning || !canvas) return;
+        
+        // Calculate how far the mouse moved
+        const deltaX = e.clientX - lastPanPoint.x;
+        const deltaY = e.clientY - lastPanPoint.y;
+        
+        // Update pan offset (for the grid background)
+        setPanOffset(prev => ({
+            x: prev.x + deltaX,
+            y: prev.y + deltaY
+        }));
+        
+        // Update Fabric.js viewport (for the canvas content)
+        const vpt = canvas.viewportTransform!;
+        vpt[4] += deltaX; // x offset
+        vpt[5] += deltaY; // y offset
+        canvas.requestRenderAll();
+        
+        // Update last position for next move
+        setLastPanPoint({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseUp = () => {
+        setIsPanning(false);
+    };
+
+    // Scroll wheel pan handler
+    const handleWheel = (e: React.WheelEvent) => {
+        e.preventDefault();
+        if (!canvas) return;
+        
+        // Get scroll deltas (deltaX for horizontal, deltaY for vertical)
+        const deltaX = e.deltaX;
+        const deltaY = e.deltaY;
+        
+        // Update pan offset (for the grid background)
+        setPanOffset(prev => ({
+            x: prev.x - deltaX,
+            y: prev.y - deltaY
+        }));
+        
+        // Update Fabric.js viewport (for the canvas content)
+        const vpt = canvas.viewportTransform!;
+        vpt[4] -= deltaX; // x offset
+        vpt[5] -= deltaY; // y offset
+        canvas.requestRenderAll();
+    };
+
+    // Calculate background style based on pan and zoom
+    const gridSize = 20; // Base grid size in pixels
+    const backgroundStyle = {
+        backgroundSize: `${gridSize * zoom}px ${gridSize * zoom}px`,
+        backgroundPosition: `${panOffset.x}px ${panOffset.y}px`,
+        backgroundImage: `
+            linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+            linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)
+        `,
+        backgroundColor: '#ffffff'
+    };
+
     return ( 
-        <div className='flex flex-col'>
+        <div className='relative h-screen'>
             <Toaster />
             
-            {/* Clear */}
-            <button onClick={() => canvas!.clear()}>CLEAR CANVAS</button>
-
-            {/* Save */}
-            <div className="fileExport">
-                <button onClick={handleSave}>
+            {/* Fixed Toolbar */}
+            <div className="fixed top-0 left-0 right-0 z-50 flex gap-4 p-4 bg-gray-100 border-b border-gray-300">
+                <button onClick={() => canvas!.clear()} className="px-4 py-2 bg-white rounded hover:bg-gray-50">
+                    CLEAR CANVAS
+                </button>
+                <button onClick={handleSave} className="px-4 py-2 bg-white rounded hover:bg-gray-50">
                     SAVE
                 </button>
             </div>
 
-            <canvas ref={canvasRef} className="border-1 border-black"></canvas>
+            {/* Canvas container with background grid */}
+            <div 
+                className="absolute inset-0 overflow-hidden"
+                style={backgroundStyle}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                onWheel={handleWheel}
+            >
+                <canvas 
+                    ref={canvasRef} 
+                    className="absolute top-0 left-0"
+                    style={{ background: 'transparent', cursor : 'crosshair' }}
+                />
+            </div>
         </div>
     );
 }
