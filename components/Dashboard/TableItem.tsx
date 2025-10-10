@@ -49,7 +49,9 @@ const TableItem: NextPage<Props> = ({ board, handleAdd, handleDelete }) => {
             <div className="flex-2 hidden xl:block text-sm">
                 { board.onlineUsers }
             </div>
-            <div className="flex-2 hidden 2xl:block text-sm">
+            <div className="flex-2 hidden 2xl:block text-sm"> 
+                {/* Last opened */}
+                { formattedDate } 
             </div>
             <div className="flex-2 hidden sm:block text-sm">
                 { board.author.name }
