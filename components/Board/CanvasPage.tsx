@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 import { BoardData } from '@/lib/models/Board';
 import { updateBoardData } from '@/app/actions';
 import toast, { Toaster } from 'react-hot-toast';
+import Navbar from './BoardNavbar';
 
 interface Props {
     board: BoardData
@@ -21,6 +22,7 @@ const CanvasPage: NextPage<Props> = ({ board }) => {
     const [zoom, setZoom] = useState(1);
     const [isPanning, setIsPanning] = useState(false);
     const [lastPanPoint, setLastPanPoint] = useState({ x: 0, y: 0 });
+    const [currentColor, setCurrentColor] = useState('#000000');
 
     useEffect(() => {
         const fabricCanvas = initializeBoard();
@@ -83,6 +85,13 @@ const CanvasPage: NextPage<Props> = ({ board }) => {
         }
     }
 
+    const handleColorChange = (color: string) => {
+        if (!canvas) return;
+        canvas.freeDrawingBrush.color = color;
+        setCurrentColor(color);
+    }
+
+    
 
     const handleMouseMove = (e: React.MouseEvent) => {
         if (!isPanning || !canvas) return;
@@ -150,14 +159,12 @@ const CanvasPage: NextPage<Props> = ({ board }) => {
             <Toaster />
             
             {/* Fixed Toolbar */}
-            <div className="fixed top-0 left-0 right-0 z-50 flex gap-4 p-4 bg-gray-100 border-b border-gray-300">
-                <button onClick={() => canvas!.clear()} className="px-4 py-2 bg-white rounded hover:bg-gray-50">
-                    CLEAR CANVAS
-                </button>
-                <button onClick={handleSave} className="px-4 py-2 bg-white rounded hover:bg-gray-50">
-                    SAVE
-                </button>
-            </div>
+            <Navbar 
+                onClear={() => canvas!.clear()} 
+                onSave={handleSave} 
+                onColorChange={handleColorChange}
+                currentColor={currentColor}
+            />
 
             {/* Canvas container with background grid */}
             <div 
